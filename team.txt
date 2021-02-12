@@ -1,0 +1,4 @@
+Bryce Holladay {bryce.holladay@gmail.com}
+Bryce Holladay {senior}
+Bryce Holladay My interests include {games, football, baseball, food}
+Bryce Holladay I am committed to me and my team members learning Python
