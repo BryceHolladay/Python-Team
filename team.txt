@@ -1,3 +1,7 @@
+Ali Bhaiwala {alibhaiwala@utexas.edu}
+Ali Bhaiwala {senior}
+Ali Bhaiwala My interests include {running, biking, eating}
+Ali Bhaiwala I am comitted to me and my team members learning Python
 Bryce Holladay {bryce.holladay@gmail.com}
 Bryce Holladay {senior}
 Bryce Holladay My interests include {games, football, baseball, food}
