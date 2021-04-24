@@ -93,7 +93,9 @@ def find_max(file):
             good_pks.append(array[i]) #creates array of all peak values in array greater than (mult)*BW
 
         return good_pks
-
+    
+    
+    
     return
 
 find_max('S4_T21.csv')
