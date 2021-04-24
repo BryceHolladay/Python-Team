@@ -20,7 +20,7 @@ def find_max(file):
     fzR.pop(0)
     fzL.pop(0)
     
-    #changing the type of fzR and fzL
+    #changing the type of fzR and fzL to a float
     for i in range(len(fzR)):
         fzR[i] = float(fzR[i])
         
