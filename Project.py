@@ -2,9 +2,10 @@
 ## Team Members: Ali Bhaiwala, Sarah Hildreth, Bryce Holladay
 ## Spring 2021
 
-from scipy.signal import find_peaks
+from scipy import signal
 from scipy import fft
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 # Function that takes in a csv file and outputs an average max peak, as well as saves a graph
@@ -57,8 +58,6 @@ def find_max(file):
 
     def avg_peak_isolation(array):
         # This method takes any peaks within 25% of the mean of the top 10 peaks
-        import numpy
-        from scipy import signal
         pks_locs= signal.find_peaks(array) #gives the indicies of the peaks in array
 
         pks_all=[]
@@ -68,7 +67,7 @@ def find_max(file):
         pks_all.sort()
         pks_all.reverse()
         pks_top10=pks_all[0:10]
-        top10_mean= numpy.mean(pks_top10)
+        top10_mean= np.mean(pks_top10)
 
 
         good_pks=[]
@@ -81,8 +80,6 @@ def find_max(file):
     def weight_cutoff_isolation(array, mass, mult):
         # This method takes any peaks that are greater than (mult) times the subject's body weight
         # mass should be in kilograms
-
-        from scipy import signal
 
         weight= 9.81*mass
         pks_locs= signal.find_peaks(array, mult*weight) #returns array of indicies of the peaks in array
