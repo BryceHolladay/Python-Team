@@ -5,6 +5,7 @@
 from scipy.signal import find_peaks
 from scipy import fft
 import pandas as pd
+import math as m
 import matplotlib.pyplot as plt
 
 # Function that takes in a csv file and outputs an average max peak, as well as saves a graph
@@ -22,10 +23,10 @@ def find_max(file):
     
     #changing the type of fzR and fzL to a float
     for i in range(len(fzR)):
-        fzR[i] = float(fzR[i])
+        fzR[i] = float(fzR[i]) * -1
         
     for i in range(len(fzL)):
-        fzL[i] = float(fzL[i])
+        fzL[i] = float(fzL[i]) * -1
     
     return
 
