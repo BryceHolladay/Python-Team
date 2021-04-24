@@ -5,7 +5,6 @@
 from scipy.signal import find_peaks
 from scipy import fft
 import pandas as pd
-import math as m
 import matplotlib.pyplot as plt
 
 # Function that takes in a csv file and outputs an average max peak, as well as saves a graph
@@ -23,11 +22,77 @@ def find_max(file):
     
     #changing the type of fzR and fzL to a float
     for i in range(len(fzR)):
-        fzR[i] = float(fzR[i]) * -1
+        fzR[i] = float(fzR[i])
         
     for i in range(len(fzL)):
-        fzL[i] = float(fzL[i]) * -1
+        fzL[i] = float(fzL[i])
     
+    def project_filter(array, order, cutoff, filt):
+    
+        """
+        This function performs a butterworth filter. Input parameters are the data to be 
+        filtered, the order of the filter, the cutoff frequency(ies), and the type of filter
+
+        Type of filter options include:
+            'highpass'- highpass filter
+            'lowpass'- lowpass filter
+            'bandpass'- bandpass filter (requires range of frequencies)
+            'bandstop'- bandstop filter(requires range of frequencies)
+
+            ** default is lowpass filter
+
+        """
+
+        from scipy import signal
+
+        if filt == '':
+           filt = 'lowpass' 
+
+        b, a = signal.butter(order, cutoff, filt)
+
+        filtarray= signal.filtfilt(b, a, array)
+
+        return filtarray
+
+
+    def avg_peak_isolation(array):
+        # This method takes any peaks within 25% of the mean of the top 10 peaks
+        import numpy
+        from scipy import signal
+        pks_locs= signal.find_peaks(array) #gives the indicies of the peaks in array
+
+        pks_all=[]
+        for i in pks_locs:
+            pks_all.append(array[i]) #creates array of values of each peak in array
+
+        pks_all.sort()
+        pks_all.reverse()
+        pks_top10=pks_all[0:10]
+        top10_mean= numpy.mean(pks_top10)
+
+
+        good_pks=[]
+        for peak in pks_all:
+            if peak >= (0.75*top10_mean) and peak <= (1.25*top10_mean):
+                good_pks.append(peak)
+
+        return good_pks
+
+    def weight_cutoff_isolation(array, mass, mult):
+        # This method takes any peaks that are greater than (mult) times the subject's body weight
+        # mass should be in kilograms
+
+        from scipy import signal
+
+        weight= 9.81*mass
+        pks_locs= signal.find_peaks(array, mult*weight) #returns array of indicies of the peaks in array
+
+        good_pks=[]
+        for i in pks_locs:
+            good_pks.append(array[i]) #creates array of all peak values in array greater than (mult)*BW
+
+        return good_pks
+
     return
 
 find_max('S4_T21.csv')
