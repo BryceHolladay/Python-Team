@@ -25,7 +25,7 @@ def find_max(file, subjectmass):
     fzL = csv['Fz.1'].astype(float).tolist() #create list of all Fz values on left leg
     
     fzR = np.negative(fzR)
-    fzL = np.positive(fzL)
+    fzL = np.negative(fzL)
     
     
     def butter_filter(array, order, cutoff, dt, filt='lowpass'):
