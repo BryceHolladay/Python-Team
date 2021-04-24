@@ -8,6 +8,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+"""
+The purpose of this code is to analyze ground reaction force (GRF) data from a split-belt treadmill to 
+identify the mean peak GRF values from the vertical GRFs while ignoring any peaks that count as 
+'cross-over steps,' or steps by the subject on the incorrect treadmill.
+"""
+
 # Function that takes in a csv file and outputs an average max peak, as well as saves a graph
 def find_max(file):
     csv = pd.read_csv(file, header=[3], nrows=36000) #Header [3] to only include 4th row of column titles
@@ -43,8 +49,6 @@ def find_max(file):
             ** default is lowpass filter
 
         """
-
-        from scipy import signal
 
         if filt == '':
            filt = 'lowpass' 
