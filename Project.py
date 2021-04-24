@@ -8,6 +8,7 @@ from scipy import fft
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 """
 The purpose of this code is to analyze ground reaction force (GRF) data from a split-belt treadmill to 
@@ -35,7 +36,7 @@ def find_max(file, subjectmass):
     for i in range(len(fzL)):
         fzL[i] = float(fzL[i])
     
-    def butter_filter(array, order, cutoff, filt = 'lowpass'):
+    def butter_filter(array, order, cutoff, dt, filt='lowpass'):
     
         """
         This function performs a butterworth filter. Input parameters are the data to be 
@@ -50,8 +51,9 @@ def find_max(file, subjectmass):
             ** default is lowpass filter
 
         """
+        cutoff_new = cutoff / (math.sqrt(2)-1)**(0.5/order);
 
-        b, a = signal.butter(order, cutoff, filt)
+        b, a = signal.butter(order, 2*dt*cutoff, filt)
 
         filtarray= signal.filtfilt(b, a, array)
 
@@ -60,9 +62,10 @@ def find_max(file, subjectmass):
 
     def avg_peak_isolation(array):
         # This method takes any peaks within 25% of the mean of the top 10 peaks
-        pks_locs= signal.find_peaks(array) #gives the indicies of the peaks in array
-
+        pks= signal.find_peaks(array) #gives the indicies of the peaks in array
+        pks_locs=pks[0]
         pks_all=[]
+        
         for i in pks_locs:
             pks_all.append(array[i]) #creates array of values of each peak in array
 
@@ -84,8 +87,8 @@ def find_max(file, subjectmass):
         # mass should be in kilograms
 
         weight= 9.81*mass
-        pks_locs= signal.find_peaks(array, mult*weight) #returns array of indicies of the peaks in array
-
+        pks= signal.find_peaks(array, mult*weight) #returns array of indicies of the peaks in array
+        pks_locs=pks[0]
         good_pks_BWcut=[]
         for i in pks_locs:
             good_pks_BWcut.append(array[i]) #creates array of all peak values in array greater than (mult)*BW
@@ -93,8 +96,8 @@ def find_max(file, subjectmass):
         return good_pks_BWcut
     
     # filter the left and right GRFs with butterworth filter
-    fzR_filt= butter_filter(fzR, 4, 15, 'lowpass')
-    fzL_filt= butter_filter(fzL, 4, 15, 'lowpass')
+    fzR_filt= butter_filter(fzR, 4, 15, 1/960, 'lowpass')
+    fzL_filt= butter_filter(fzL, 4, 15, 1/960, 'lowpass')
     
     fzR_top10= avg_peak_isolation(fzR_filt) #all peaks accepted by avg peak cutoff method
     fzR_BWcut= weight_cutoff_isolation(fzR_filt, subjectmass) #all peaks accepted by BW cutoff method
@@ -122,3 +125,4 @@ def find_max(file, subjectmass):
     return FinalVals
 
 find_max('S4_T21.csv', 65.5)
+
