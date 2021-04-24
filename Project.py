@@ -18,23 +18,12 @@ identify the mean peak GRF values from the vertical GRFs while ignoring any peak
 
 # Function that takes in a csv file and subject's mass (Kg) and outputs an average max peak, as well as saves a graph
 def find_max(file, subjectmass):
-    csv = pd.read_csv(file, header=[3], nrows=36000) #Header [3] to only include 4th row of column titles
+    csv = pd.read_csv(file, header=[3],skiprows = [4], nrows=36000) #Header [3] to only include 4th row of column titles
     
-    frame = csv['Frame'].tolist()   
-    fzR = csv['Fz'].tolist() #creating a list of all Fz values on right foot
-    fzL = csv['Fz.1'].tolist() #create list of all Fz values on left leg
+    frame = csv['Frame'].astype(float).tolist()   
+    fzR = csv['Fz'].astype(float).tolist() #creating a list of all Fz values on right foot
+    fzL = csv['Fz.1'].astype(float).tolist() #create list of all Fz values on left leg
     
-    #Removes units element from each column
-    frame.pop(0)
-    fzR.pop(0)
-    fzL.pop(0)
-    
-    #changing the type of fzR and fzL to a float
-    for i in range(len(fzR)):
-        fzR[i] = float(fzR[i])
-        
-    for i in range(len(fzL)):
-        fzL[i] = float(fzL[i])
     
     def butter_filter(array, order, cutoff, dt, filt='lowpass'):
     
@@ -119,7 +108,6 @@ def find_max(file, subjectmass):
     # Create nested dictionary for methods, R/L foot, mean value, peak arrays
     FinalVals= {'Top 10 Avg Method': {'Right': fzR_top10_data, 'Left': fzL_top10_data},
                 'BW Cutoff Method': {'Right': fzR_BWcut_data, 'Left': fzL_BWcut_data}}
-    
     
     
     return FinalVals
