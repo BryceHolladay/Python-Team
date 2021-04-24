@@ -45,7 +45,7 @@ def find_max(file, subjectmass):
         """
         cutoff_new = cutoff / (math.sqrt(2)-1)**(0.5/order);
 
-        b, a = signal.butter(order, 2*dt*cutoff, filt)
+        b, a = signal.butter(order, 2*dt*cutoff_new, filt)
 
         filtarray= signal.filtfilt(b, a, array)
 
