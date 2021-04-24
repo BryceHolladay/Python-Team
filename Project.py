@@ -35,7 +35,7 @@ def find_max(file, subjectmass):
     for i in range(len(fzL)):
         fzL[i] = float(fzL[i])
     
-    def butter_filter(array, order, cutoff, filt):
+    def butter_filter(array, order, cutoff, filt = 'lowpass'):
     
         """
         This function performs a butterworth filter. Input parameters are the data to be 
@@ -50,9 +50,6 @@ def find_max(file, subjectmass):
             ** default is lowpass filter
 
         """
-
-        if filt == '':
-           filt = 'lowpass' 
 
         b, a = signal.butter(order, cutoff, filt)
 
