@@ -10,10 +10,23 @@ import matplotlib.pyplot as plt
 # Function that takes in a csv file and outputs an average max peak, as well as saves a graph
 def find_max(file):
     csv = pd.read_csv(file, header=[3], nrows=36000) #Header [3] to only include 4th row of column titles
-        
+    
+    frame = csv['Frame'].tolist()   
     fzR = csv['Fz'].tolist() #creating a list of all Fz values on right foot
     fzL = csv['Fz.1'].tolist() #create list of all Fz values on left leg
-       
+    
+    #Removes units element from each column
+    frame.pop(0)
+    fzR.pop(0)
+    fzL.pop(0)
+    
+    #changing the type of fzR and fzL
+    for i in range(len(fzR)):
+        fzR[i] = float(fzR[i])
+        
+    for i in range(len(fzL)):
+        fzL[i] = float(fzL[i])
+    
     return
 
 find_max('S4_T21.csv')
