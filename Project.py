@@ -78,7 +78,7 @@ def find_max(file, subjectmass):
         good_pks_top10=[]
         for peak in pks_all:
             if peak >= (0.75*top10_mean) and peak <= (1.25*top10_mean):
-                good_pks.append(peak)
+                good_pks_top10.append(peak)
 
         return good_pks_top10
 
@@ -91,7 +91,7 @@ def find_max(file, subjectmass):
 
         good_pks_BWcut=[]
         for i in pks_locs:
-            good_pks.append(array[i]) #creates array of all peak values in array greater than (mult)*BW
+            good_pks_BWcut.append(array[i]) #creates array of all peak values in array greater than (mult)*BW
 
         return good_pks_BWcut
     
