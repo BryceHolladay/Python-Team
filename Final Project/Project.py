@@ -117,6 +117,22 @@ def find_max(file, subjectmass):
 
     return FinalVals
 
+def bar_graphs(files, FinalVals):
+    N = len(files)
+    files = tuple(files)
+    
+    ind = np.arrange(N)
+    width = .35
+    
+    fig, ax = plt.subplots()
+    rects1 = ax.bar(ind, FinalVals['Top 10 Avg Method'], width, color='b')
+    rects2 = ax.bar(ind + width, FinalVals['BW Cutoff Method'], width, color='g')
+    ax.set_ylabel('Trials')
+    ax.set_title('Mean Forces for Right Foot')
+    ax.set_xticks(ind + width / 2)
+    ax.set_xticklabels(files)
+    ax.legend((rects1[0], rects2[0]), ('Top_10R', 'BWcutR'))
+    
 def main():
 
     all_csv_files = []
@@ -138,6 +154,8 @@ def main():
         text = 'Enter the weight of runner for file ' + str(csv_name) + ' in kg: '
         inp = float(input(text))
         find_max(c, inp)
+        
+    bar_graphs(files = all_csv_files, FinalVals)
 
 if __name__ == "__main__":
     main()
