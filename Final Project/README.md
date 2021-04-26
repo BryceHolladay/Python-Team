@@ -5,9 +5,9 @@ This project will allow you to convert raw force plate data into usable filtered
 Data was collected by Sarah Hildreth in the UT Austin Neuromuscular Biomechanics lab group under Dr. Richard Neptune.
 Participants wearing special insoles were asked to run on two treadmills, one for each foot, and Ground Reaction Forces (GRFs) were measured.
 During data collection, errors were made by the participants where they placed the wrong foot on the wrong force plate during running, resulting in some data peaks reporting incorrect data.
-This project exists to remove these false steps from the dataset, and return an average value of the accurately recorded peaks, as well as several modes of data visualization.
+This project exists to remove these false steps from the vertical GRF dataset, and return an average value of the accurately recorded peaks, as well as several modes of data visualization.
 <br><br>
-The Project.py script, when run, reads csv files from the data sub-directory and outputs filtered peaks and means to results.txt.
+The Project.py script, when run, reads csv files from the data sub-directory and outputs filtered peak values and means to results.txt.
 Graphs and visualizations will be placed into the graphs sub-directory.
 Peaks are filtered using two methods, the Top Ten Average method and the Body Weight Cutoff method, both of which are returned and compared
 Information about the process will be printed to the console for the user to review as well while the script is running.
