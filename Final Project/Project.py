@@ -29,8 +29,8 @@ def butter_filter(array, order, cutoff, dt, filt='lowpass'):
 
         ** default is lowpass filter
     """
-
-    b, a = signal.butter(order, 2 * dt * cutoff, filt)
+    new_cutoff = cutoff / (np.sqrt(2) - 1) ** (.5 / order)
+    b, a = signal.butter(order, 2 * dt * new_cutoff, filt)
     filtarray = signal.filtfilt(b, a, array)
     return filtarray
 
@@ -336,7 +336,8 @@ def main():
             line_split = line.split(',')
             weights[str(line_split[0])] = float(line_split[1])
         except: pass
-
+    f.close()
+    
     # Performs max peaks analysis on each csv file found
     cleaned = {}
     for c in all_csv_files:
