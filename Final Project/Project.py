@@ -31,12 +31,8 @@ def butter_filter(array, order, cutoff, dt, filt='lowpass'):
         ** default is lowpass filter
     """
 
-    cutoff_new = cutoff / (math.sqrt(2) - 1) ** (0.5 / order)
-
     b, a = signal.butter(order, 2 * dt * cutoff, filt)
-
     filtarray = signal.filtfilt(b, a, array)
-
     return filtarray
 
 
@@ -333,7 +329,7 @@ def main():
     print('\n\n===================\nBegin Data Analysis\n===================\n')
 
     # Reads in weights from a text file
-    weight_file = "./data/weights.txt"
+    weight_file = ".\\data\\weights.txt"
     f = open(weight_file, "r")
     weights = {}
     for line in f:
