@@ -298,7 +298,19 @@ def plot(fzR, fzL, file_name):
     plt.xlabel('Time (s)')
     plt.ylabel('Reaction Force (N)')
     plt.legend(loc='upper right')
+    plt.title(file_name)
     name = 'graphs/' + file_name + '_plot.png'
+    plt.savefig(name)
+
+    plt.figure()
+    plt.plot(time, fzR, label='Right')
+    plt.plot(time, fzL, label='Left')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Reaction Force (N)')
+    plt.legend(loc='upper right')
+    plt.title(file_name + ' Zoomed')
+    plt.xlim(15, 20)
+    name = 'graphs/' + file_name + '_plot_Zoomed.png'
     plt.savefig(name)
 
 
