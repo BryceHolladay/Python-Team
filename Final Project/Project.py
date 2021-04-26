@@ -95,6 +95,7 @@ def find_max(file, subjectmass):
     fzL = np.negative(fzL)
 
     plot(fzR, fzL, file.split('\\')[-1])
+    fft_plot(fzR, fzL, file.split('\\')[-1])
 
     # filter the left and right GRFs with butterworth filter
     fzR_filt = butter_filter(fzR, 4, 15, 1 / 960, 'lowpass')
@@ -162,10 +163,61 @@ def bar_graphs(vals):
     plt.title('Left and Right Force Plate Measurements')
     plt.savefig('graphs/bar_graph.png')
     print('Bar graph saved at .\\graphs\\bar_graph.png')
-    return
 
-def fft(vals):
-    return
+
+def fft_plot(fzR, fzL, file_name):
+    time = np.zeros(len(fzR)).tolist()
+    t = 0
+    for i in range(len(time)):
+        time[i] = t
+        t += 1 / 960
+
+    # FFT for Right Foot
+    N = len(time)
+    dt = 1/960
+    df = 1/(dt*N)
+    Xk = fft.fft(fzR)
+    fk = [k*df for k in range(N)]
+    Gxx = [(2.0/N) * abs(Xk[i]) for i in range(N)]
+
+    plt.figure()
+    plt.plot(fk, Gxx)
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Amplitude')
+    plt.title(file_name + ' Right Foot Fast Fourier Transform')
+    plt.savefig('graphs/fft/' + file_name + '_FFT_RF.png')
+
+    plt.figure()
+    plt.plot(fk, Gxx)
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Amplitude')
+    plt.xlim([0, 5])
+    plt.title(file_name + ' Right Foot Fast Fourier Transform Zoomed')
+    plt.savefig('graphs/fft/' + file_name + '_FFT_RF_Zoom.png')
+
+    # FFT for Left Foot
+    N = len(time)
+    dt = 1/960
+    df = 1/(dt*N)
+    Xk = fft.fft(fzL)
+    fk = [k*df for k in range(N)]
+    Gxx = [(2.0/N) * abs(Xk[i]) for i in range(N)]
+
+    plt.figure()
+    plt.plot(fk, Gxx)
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Amplitude')
+    plt.title(file_name + ' Left Foot Fast Fourier Transform')
+    plt.savefig('graphs/fft/' + file_name + '_FFT_LF.png')
+
+    plt.figure()
+    plt.plot(fk, Gxx)
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Amplitude')
+    plt.xlim([0, 5])
+    plt.title(file_name + ' Left Foot Fast Fourier Transform Zoomed')
+    plt.savefig('graphs/fft/' + file_name + '_FFT_LF_Zoom.png')
+
 
 def plot(fzR, fzL, file_name):
     time = np.zeros(len(fzR)).tolist()
@@ -173,7 +225,7 @@ def plot(fzR, fzL, file_name):
     for i in range(len(time)):
         time[i] = t
         t += 1/960
-    fig = plt.figure()
+    plt.figure()
     plt.plot(time, fzR, label='Right')
     plt.plot(time, fzL, label='Left')
     plt.xlabel('Time (s)')
