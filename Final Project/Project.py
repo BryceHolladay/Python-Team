@@ -94,6 +94,8 @@ def find_max(file, subjectmass):
     fzR = np.negative(fzR)
     fzL = np.negative(fzL)
 
+    plot(fzR, fzL, file.split('\\')[-1])
+
     # filter the left and right GRFs with butterworth filter
     fzR_filt = butter_filter(fzR, 4, 15, 1 / 960, 'lowpass')
     fzL_filt = butter_filter(fzL, 4, 15, 1 / 960, 'lowpass')
@@ -121,21 +123,64 @@ def find_max(file, subjectmass):
     return FinalVals
 
 
-def bar_graphs(files, FinalVals):
-    N = len(files)
-    files = tuple(files)
+def bar_graphs(vals):
+    keys = vals.keys()
+    right = []
+    left = []
+    for k in keys:
+        #r_avg = (vals[k]['Top 10 Avg Method']['Right'][0] + vals[k]['BW Cutoff Method']['Right'][0]) / 2
+        #l_avg = (vals[k]['Top 10 Avg Method']['Left'][0] + vals[k]['BW Cutoff Method']['Left'][0]) / 2
+        r_avg = vals[k]['Top 10 Avg Method']['Right'][0]
+        l_avg = vals[k]['Top 10 Avg Method']['Left'][0]
+        right.append(r_avg)
+        left.append(l_avg)
 
-    ind = np.arrange(N)
-    width = .35
+    barwidth = 0.25
+    data = [left, right]
+    X = np.arange(len(keys))
+    fig, ax = plt.subplots(figsize=(12,8))
+    labels = []
+    for n in range(len(data[0])):
+        labels.append(data[0][n])
+    for m in range(len(data[1])):
+        labels.append(data[1][m])
+    rects = ax.patches
+    for rect, label in zip(rects, labels):
+        plt.text(i.get_width()+0.2, i.get_y()+0.5,
+                 labels[i])
+    plt.bar(X + 0.00, data[0], color = 'b', width = barwidth, label='left')
+    plt.bar(X + 0.25, data[1], color = 'r', width = barwidth, label='right')
+    plt.xlabel("Trial")
+    plt.ylabel('Reaction Force (N)')
+    plt.xticks([r + barwidth for r in range(len(data[0]))], keys)
+    for rect, label in zip(rects, labels):
+        height = rect.get_height()
+        ax.text(rect.get_x() + rect.get_width() / 2, height + 5,
+                label.round(2), ha='center', va='bottom', fontweight='extra bold')
 
-    fig, ax = plt.subplots()
-    rects1 = ax.bar(ind, FinalVals['Top 10 Avg Method'], width, color='b')
-    rects2 = ax.bar(ind + width, FinalVals['BW Cutoff Method'], width, color='g')
-    ax.set_ylabel('Trials')
-    ax.set_title('Mean Forces for Right Foot')
-    ax.set_xticks(ind + width / 2)
-    ax.set_xticklabels(files)
-    ax.legend((rects1[0], rects2[0]), ('Top_10R', 'BWcutR'))
+    plt.legend(loc='lower right')
+    plt.title('Left and Right Force Plate Measurements')
+    plt.savefig('graphs/bar_graph.png')
+    print('Bar graph saved at .\\graphs\\bar_graph.png')
+    return
+
+def fft(vals):
+    return
+
+def plot(fzR, fzL, file_name):
+    time = np.zeros(len(fzR)).tolist()
+    t = 0
+    for i in range(len(time)):
+        time[i] = t
+        t += 1/960
+    fig = plt.figure()
+    plt.plot(time, fzR, label='Right')
+    plt.plot(time, fzL, label='Left')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Reaction Force (N)')
+    plt.legend(loc='upper right')
+    name = 'graphs/' + file_name + '_plot.png'
+    plt.savefig(name)
 
 
 def main():
@@ -186,9 +231,10 @@ def main():
         print('Right Mean:', data_max['BW Cutoff Method']['Right'][0])
         print('Left Mean:', data_max['BW Cutoff Method']['Left'][0])
         print()
+        print('Plot saved at .\\graphs\\'+ csv_name +'_plot.png\n')
 
-    #bar_graphs(all_csv_files, FinalVals)
-    print(cleaned)
+    print('====================\n')
+    bar_graphs(cleaned)
 
 if __name__ == "__main__":
     main()
